@@ -398,3 +398,7 @@ const Admin = () => {
 };
 
 export default Admin;
+
+export async function getServerSideProps() {
+  return { props: {} };
+}

@@ -27,9 +27,10 @@ export async function GET(_: NextRequest, { params }: { params: { id: string } }
   doc.fontSize(16).text(`Invoice ${invoice.number}`, { align: "right" });
   doc.moveDown();
 
-  doc.fontSize(12).text(`Bill To: ${invoice.customer?.name || "Customer"}`);
-  if (invoice.customer?.phone) doc.text(`Phone: ${invoice.customer.phone}`);
-  if (invoice.customer?.address) doc.text(`Address: ${invoice.customer.address}`);
+  const customer: any = (invoice as any).customer || {};
+  doc.fontSize(12).text(`Bill To: ${customer.name || "Customer"}`);
+  if (customer.phone) doc.text(`Phone: ${customer.phone}`);
+  if (customer.address) doc.text(`Address: ${customer.address}`);
   doc.moveDown();
 
   doc.fontSize(12).text("Items:");
@@ -50,7 +51,10 @@ export async function GET(_: NextRequest, { params }: { params: { id: string } }
     doc.on("end", () => resolve(Buffer.concat(chunks)));
   });
 
-  return new NextResponse(buffer, {
+  // Convert Buffer to Uint8Array for Response body
+  const bytes = new Uint8Array(buffer);
+
+  return new NextResponse(bytes, {
     headers: {
       "Content-Type": "application/pdf",
       "Content-Disposition": `attachment; filename=${invoice.number}.pdf`,
