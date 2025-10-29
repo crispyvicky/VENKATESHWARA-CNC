@@ -64,7 +64,7 @@ const About = () => {
           
           <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
             <p>
-              Founded in 1995, <span className="font-semibold text-walnut">Venkateshwara CNC</span> began as a small woodworking shop with a simple mission: to preserve the ancient art of wooden craftsmanship while embracing modern innovation. Over the past three decades, we've grown into one of India's most trusted names in premium wooden art and CNC services.
+              With over <span className="font-semibold text-walnut">25 years</span> of proven excellence, <span className="font-semibold text-walnut">Venkateshwara CNC</span> has earned the trust of homeowners, architects, and brands across Hyderabad and beyond. We blend traditional craftsmanship with precision CNC to deliver museum-grade wooden art and functional installations.
             </p>
             
             <p>
@@ -72,7 +72,7 @@ const About = () => {
             </p>
             
             <p>
-              Today, we serve architects, interior designers, builders, and discerning homeowners who demand nothing but the finest. From ornate temple carvings to contemporary wall art, from grand entrance doors to elegant furniture pieces, each project is a testament to our dedication to the craft.
+              Our portfolio spans ornate temple doors, pillars, portraits, nameboards, decorative jali and grills, wall arts, furniture, and large-format ceiling installations. Every grain, curve, and finish reflects our obsession with quality and longevity.
             </p>
             
             <p className="font-accent italic text-xl text-golden-teak text-center py-8">

@@ -2,10 +2,10 @@ import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import gallery1 from "@/assets/gallery-1.jpg";
-import gallery2 from "@/assets/gallery-2.jpg";
-import gallery3 from "@/assets/gallery-3.jpg";
-import gallery4 from "@/assets/gallery-4.jpg";
+const gallery1 = "/gallery-1.jpg";
+const gallery2 = "/gallery-2.jpg";
+const gallery3 = "/gallery-3.jpg";
+const gallery4 = "/gallery-4.jpg";
 
 const Gallery = () => {
   const [activeFilter, setActiveFilter] = useState("all");

@@ -1,12 +1,15 @@
+"use client";
+
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const location = useLocation();
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,17 +29,17 @@ const Navigation = () => {
     { name: "Admin", path: "/admin" },
   ];
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => pathname === path;
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "glass-effect border-b border-aged-oak/30" : "bg-transparent"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all  duration-300 ${
+        isScrolled ? "glass-effect fixed  bg-white border-b border-aged-oak/30" : "bg-transparent"
       }`}
     >
       <div className="max-w-[1440px] mx-auto px-8 h-[90px] flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-3 hover:scale-105 transition-smooth">
+        <Link href="/" className="flex items-center gap-3 hover:scale-105 transition-smooth">
           <div className="text-ivory">
             <h1 className="text-2xl font-display font-bold tracking-tight">
               Venkateshwara <span className="text-golden-teak">CNC</span>
@@ -50,7 +53,7 @@ const Navigation = () => {
           {navLinks.map((link) => (
             <Link
               key={link.path}
-              to={link.path}
+              href={link.path}
               className={`text-base font-medium transition-smooth relative group ${
                 isActive(link.path) ? "text-gold-leaf" : "text-sandalwood hover:text-gold-leaf"
               }`}
@@ -67,7 +70,7 @@ const Navigation = () => {
 
         {/* CTA Button */}
         <div className="hidden lg:block">
-          <Link to="/contact">
+          <Link href="/contact">
             <Button variant="golden" size="default">
               Get Quote
             </Button>
@@ -90,7 +93,7 @@ const Navigation = () => {
             {navLinks.map((link) => (
               <Link
                 key={link.path}
-                to={link.path}
+                href={link.path}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`block text-lg font-medium transition-colors ${
                   isActive(link.path) ? "text-gold-leaf" : "text-sandalwood hover:text-gold-leaf"
@@ -99,7 +102,7 @@ const Navigation = () => {
                 {link.name}
               </Link>
             ))}
-            <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)}>
               <Button variant="golden" size="default" className="w-full mt-4">
                 Get Quote
               </Button>

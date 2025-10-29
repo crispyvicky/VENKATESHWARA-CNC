@@ -1,8 +1,9 @@
+
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { Settings, Palette, Hammer, Sparkles, Layers, Home } from "lucide-react";
 
 const Services = () => {
@@ -14,10 +15,22 @@ const Services = () => {
       features: ["3D Carving", "Precision Cutting", "Pattern Replication", "Complex Geometries"],
     },
     {
+      icon: Settings,
+      title: "CNC Engraving",
+      description: "High-detail engraving for portraits, signage, nameplates, and decorative inlays across hardwoods and veneers.",
+      features: ["Portrait Engraving", "Nameboards", "Logos & Emblems", "Inlay Work"],
+    },
+    {
       icon: Palette,
       title: "Custom Wood Design",
       description: "Collaborate with our expert designers to bring your vision to life. From traditional to contemporary, we create bespoke designs tailored to your space.",
       features: ["Consultation", "3D Rendering", "Material Selection", "Design Iterations"],
+    },
+    {
+      icon: Layers,
+      title: "Decorative Jali & Grills",
+      description: "Intricate jali patterns and grills for partitions, facades, wardrobes, and vents with artisanal quality.",
+      features: ["Islamic Patterns", "Geometric Motifs", "Vent Panels", "Room Dividers"],
     },
     {
       icon: Home,
@@ -42,6 +55,24 @@ const Services = () => {
       title: "Architectural Elements",
       description: "Ceiling panels, columns, and architectural details that add character and luxury to your spaces. Perfect for high-end residential and commercial projects.",
       features: ["Ceiling Panels", "Decorative Columns", "Railings", "Trim Work"],
+    },
+    {
+      icon: Hammer,
+      title: "Temple Doors & Traditional Art",
+      description: "Sacred doors, pillars, and motifs crafted with reverence, blending cultural heritage with precision craftsmanship.",
+      features: ["Temple Doors", "Pillars", "Panels", "Mandapam Elements"],
+    },
+    {
+      icon: Sparkles,
+      title: "Portraits & Nameboards",
+      description: "Lifelike portraits and premium nameboards for homes and businesses, finished to perfection.",
+      features: ["Portrait Panels", "Nameplates", "Business Signage", "House Names"],
+    },
+    {
+      icon: Layers,
+      title: "Ceiling Installations",
+      description: "Stunning CNC ceiling installations and layered designs that elevate interior spaces.",
+      features: ["Layered Designs", "Backlit Panels", "Cove Patterns", "Acoustic Panels"],
     },
   ];
 
@@ -154,7 +185,7 @@ const Services = () => {
           <p className="text-xl text-sandalwood mb-8 leading-relaxed">
             Get a free consultation and quote for your custom woodwork project
           </p>
-          <Link to="/contact">
+          <Link href="/contact">
             <Button variant="golden" size="xl">
               Get Free Quote
             </Button>

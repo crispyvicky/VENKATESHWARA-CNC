@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -42,10 +43,10 @@ const Contact = () => {
         
         <div className="relative z-10 text-center px-8">
           <h1 className="text-5xl md:text-6xl font-display font-bold text-ivory mb-4">
-            Contact Us
+            Hyderabad’s Trusted CNC Woodwork Partner
           </h1>
           <p className="text-xl text-sandalwood font-accent italic">
-            Let's Create Something Beautiful Together
+            Premium projects across Hyderabad and beyond — get your quote today
           </p>
         </div>
       </section>
@@ -58,10 +59,10 @@ const Contact = () => {
             <div className="lg:col-span-3">
               <Card className="p-8 md:p-12 shadow-premium border-none">
                 <h2 className="text-3xl font-display font-bold text-walnut mb-2">
-                  Request a Quote
+                  Request a Project Quote
                 </h2>
                 <p className="text-muted-foreground mb-8">
-                  Fill out the form below and we'll get back to you within 24 hours
+                  Share your requirements — size, materials, style. We’ll respond within 24 hours with expert guidance.
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -173,9 +174,9 @@ const Contact = () => {
                     <div>
                       <p className="font-semibold text-walnut mb-1">Visit Us</p>
                       <p className="text-sm text-muted-foreground leading-relaxed">
-                        123 Craftsman Street<br />
-                        Woodwork District<br />
-                        Mumbai, MH 400001
+                        Hyderabad Workshop & Showroom<br />
+                        Near main market, IDA area<br />
+                        Hyderabad, Telangana
                       </p>
                     </div>
                   </div>

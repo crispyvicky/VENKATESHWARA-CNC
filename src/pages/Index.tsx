@@ -1,17 +1,17 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight, Sparkles, Settings, Palette, ChevronDown } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import heroBg from "@/assets/hero-bg.jpg";
-import gallery1 from "@/assets/gallery-1.jpg";
-import gallery2 from "@/assets/gallery-2.jpg";
-import gallery3 from "@/assets/gallery-3.jpg";
-import gallery4 from "@/assets/gallery-4.jpg";
-import cncPrecision from "@/assets/cnc-precision.jpg";
-import customDesign from "@/assets/custom-design.jpg";
-import premiumMaterials from "@/assets/premium-materials.jpg";
+const heroBg = "/hero-bg.jpg";
+const gallery1 = "/gallery-1.jpg";
+const gallery2 = "/gallery-2.jpg";
+const gallery3 = "/gallery-3.jpg";
+const gallery4 = "/gallery-4.jpg";
+const cncPrecision = "/cnc-precision.jpg";
+const customDesign = "/custom-design.jpg";
+const premiumMaterials = "/premium-materials.jpg";
 
 const Index = () => {
   const features = [
@@ -80,12 +80,12 @@ const Index = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center animate-slide-up delay-400">
-            <Link to="/gallery">
+            <Link href="/gallery">
               <Button variant="golden" size="xl">
                 Explore Our Gallery <ArrowRight className="ml-2" />
               </Button>
             </Link>
-            <Link to="/contact">
+            <Link href="/contact">
               <Button variant="outline" size="xl">
                 Request Custom Design
               </Button>
@@ -136,7 +136,7 @@ const Index = () => {
                     {feature.description}
                   </p>
                   <Link
-                    to="/services"
+                    href="/services"
                     className="inline-flex items-center gap-2 mt-6 text-sm font-semibold text-secondary group-hover:text-accent transition-colors"
                   >
                     Learn More <ArrowRight className="w-4 h-4" />
@@ -177,7 +177,7 @@ const Index = () => {
           </div>
 
           <div className="text-center">
-            <Link to="/gallery">
+            <Link href="/gallery">
               <Button variant="golden" size="lg">
                 View Full Gallery <ArrowRight className="ml-2" />
               </Button>
@@ -238,7 +238,7 @@ const Index = () => {
           <p className="text-xl text-sandalwood mb-12 leading-relaxed">
             Let's create something extraordinary together. From concept to completion, we bring your vision to life with masterful craftsmanship.
           </p>
-          <Link to="/contact">
+          <Link href="/contact">
             <Button variant="golden" size="xl" className="shadow-golden-lg animate-float">
               Schedule Consultation
             </Button>

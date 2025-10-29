@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+"use client";
+import Link from "next/link";
 import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 
 const Footer = () => {
@@ -39,7 +40,7 @@ const Footer = () => {
               ].map((link) => (
                 <li key={link.path}>
                   <Link
-                    to={link.path}
+                    href={link.path}
                     className="text-sm hover:text-golden-teak transition-colors inline-block hover:translate-x-1 transition-smooth"
                   >
                     {link.name}
@@ -127,10 +128,10 @@ const Footer = () => {
               © {currentYear} Venkateshwara CNC. All rights reserved.
             </p>
             <div className="flex gap-6 text-sm">
-              <Link to="/privacy" className="text-aged-oak hover:text-golden-teak transition-colors">
+              <Link href="/privacy" className="text-aged-oak hover:text-golden-teak transition-colors">
                 Privacy Policy
               </Link>
-              <Link to="/terms" className="text-aged-oak hover:text-golden-teak transition-colors">
+              <Link href="/terms" className="text-aged-oak hover:text-golden-teak transition-colors">
                 Terms of Service
               </Link>
             </div>
