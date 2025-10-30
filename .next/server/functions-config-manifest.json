@@ -1,1 +1,1 @@
-{"version":1,"functions":{"/api/auth/[...nextauth]":{},"/api/media/list":{},"/api/invoices/[id]/pdf":{},"/api/media/upload":{},"/Admin":{}}}
+{"version":1,"functions":{"/api/auth/[...nextauth]":{},"/api/invoices/[id]/pdf":{},"/api/media/list":{},"/api/media/upload":{},"/Admin":{}}}
