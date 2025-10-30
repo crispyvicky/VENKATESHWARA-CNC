@@ -868,3 +868,8 @@ function Admin() {
 }
 
 export default Admin;
+
+// Force SSR for this page to avoid static prerender/export errors with useSession
+export async function getServerSideProps() {
+  return { props: {} };
+}
