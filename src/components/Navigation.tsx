@@ -40,8 +40,8 @@ const Navigation = () => {
       <div className="max-w-[1440px] mx-auto px-8 h-[90px] flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 hover:scale-105 transition-smooth">
-          <div className="text-ivory">
-            <h1 className="text-2xl font-display font-bold tracking-tight">
+          <div>
+            <h1 className={`text-2xl font-display font-bold tracking-tight ${isScrolled ? "text-golden-teak" : "text-ivory"}`}>
               Venkateshwara <span className="text-golden-teak">CNC</span>
             </h1>
             <p className="text-xs font-accent italic text-sandalwood">Timeless Wooden Artistry</p>

@@ -15,7 +15,7 @@ const Footer = () => {
           {/* Brand Column */}
           <div className="space-y-6">
             <div>
-              <h3 className="text-2xl font-display font-bold text-ivory mb-2">
+              <h3 className="text-2xl font-display font-bold text-walnut mb-2">
                 Venkateshwara <span className="text-golden-teak">CNC</span>
               </h3>
               <p className="text-sm font-accent italic text-aged-oak">

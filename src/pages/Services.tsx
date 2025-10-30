@@ -81,7 +81,7 @@ const Services = () => {
       <Navigation />
 
       {/* Page Header */}
-      <section className="relative h-[400px] flex items-center justify-center overflow-hidden mt-[90px]">
+      <section className="relative h-[150px] flex items-center justify-center overflow-hidden mt-[90px]">
         <div className="absolute inset-0 bg-gradient-to-br from-mahogany via-walnut to-aged-oak" />
         <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnoiIHN0cm9rZT0iI0ZGRiIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9nPjwvc3ZnPg==')]" />
         
@@ -98,7 +98,7 @@ const Services = () => {
       {/* Services Grid */}
       <section className="py-20 bg-background">
         <div className="max-w-[1200px] mx-auto px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-10">
             {services.map((service, index) => {
               const Icon = service.icon;
               return (
@@ -149,26 +149,26 @@ const Services = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
             {[
               { step: "01", title: "Consultation", desc: "Discuss your vision and requirements" },
               { step: "02", title: "Design", desc: "Create detailed plans and 3D renders" },
               { step: "03", title: "Crafting", desc: "Precision CNC work and handcrafting" },
               { step: "04", title: "Delivery", desc: "Installation and final touches" },
             ].map((item, index) => (
-              <div key={index} className="text-center relative">
-                <div className="text-6xl font-display font-bold text-golden-teak/20 mb-4">
+              <div key={index} className="text-center relative rounded-lg border-2 border-golden-teak/20 bg-background py-6 px-2 shadow-sm">
+                <div className="text-6xl font-display font-bold text-golden-teak/40 mb-4">
                   {item.step}
                 </div>
                 <h3 className="text-xl font-display font-semibold text-walnut mb-2">
                   {item.title}
                 </h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground mb-1">
                   {item.desc}
                 </p>
-                {index < 3 && (
-                  <div className="hidden md:block absolute top-12 left-full w-full h-0.5 bg-gradient-to-r from-golden-teak to-transparent -ml-4" />
-                )}
+                {/* {index < 3 && (
+                  <div className="hidden md:block absolute top-12 left-full w-full h-0.5 bg-gradient-to-r from-golden-teak to-transparent -ml-4 z-[2]" />
+                )} */}
               </div>
             ))}
           </div>

@@ -14,6 +14,7 @@ export interface JobDoc extends mongoose.Document {
   invoiceId?: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
+  deliveryDate?: Date;
 }
 
 const JobSchema = new Schema<JobDoc>(
@@ -29,6 +30,7 @@ const JobSchema = new Schema<JobDoc>(
     balance: { type: Number, required: true },
     status: { type: String, enum: ["pending", "in_progress", "completed"], default: "pending" },
     invoiceId: { type: Schema.Types.ObjectId, ref: "Invoice" },
+    deliveryDate: { type: Date },
   },
   { timestamps: true }
 );

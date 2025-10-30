@@ -9,6 +9,7 @@ export interface InvoiceDoc extends mongoose.Document {
   paid: number;
   balance: number;
   number: string; // e.g., INV-2025-001
+  invoiceDate: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -23,6 +24,7 @@ const InvoiceSchema = new Schema<InvoiceDoc>(
     paid: { type: Number, default: 0 },
     balance: { type: Number, required: true },
     number: { type: String, required: true, unique: true, index: true },
+    invoiceDate: { type: Date, default: Date.now },
   },
   { timestamps: true }
 );

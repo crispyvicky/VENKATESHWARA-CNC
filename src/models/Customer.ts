@@ -9,6 +9,7 @@ export interface CustomerDoc extends mongoose.Document {
   state?: string;
   pincode?: string;
   notes?: string;
+  deliveryDate?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -23,6 +24,7 @@ const CustomerSchema = new Schema<CustomerDoc>(
     state: { type: String },
     pincode: { type: String },
     notes: { type: String },
+    deliveryDate: { type: Date },
   },
   { timestamps: true }
 );

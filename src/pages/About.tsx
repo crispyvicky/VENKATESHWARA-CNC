@@ -39,7 +39,7 @@ const About = () => {
       <Navigation />
 
       {/* Page Header */}
-      <section className="relative h-[400px] flex items-center justify-center overflow-hidden mt-[90px]">
+      <section className="relative h-[150px] flex items-center justify-center overflow-hidden mt-[90px]">
         <div className="absolute inset-0 bg-gradient-to-br from-aged-oak via-mahogany to-walnut" />
         <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnoiIHN0cm9rZT0iI0ZGRiIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9nPjwvc3ZnPg==')]" />
         
@@ -52,6 +52,19 @@ const About = () => {
           </p>
         </div>
       </section>
+      <section className="py-16 bg-background">
+        <div className="max-w-md mx-auto flex flex-col items-center justify-center">
+          {/* Placeholder for founder image */}
+          <div className="w-40 h-40 rounded-full border-4 border-golden-teak shadow-golden flex items-center justify-center bg-walnut text-golden-teak text-6xl font-bold mb-4">
+            {/* Put <img src={profileUrl} .../> here later */}
+            <span>Photo</span>
+          </div>
+          <h3 className="text-2xl font-display font-bold text-walnut mb-1">The Artisan Behind the Art</h3>
+          <p className="text-lg text-muted-foreground">Founder / Proprietor</p>
+          <p className="mt-2 text-center text-sandalwood">Crafting legacy pieces for over 25 years with passion and precision — a tradition you can trust. (Upload your portrait here anytime)</p>
+        </div>
+      </section>
+
 
       {/* Story Section */}
       <section className="py-20 bg-background">
@@ -150,6 +163,8 @@ const About = () => {
         </div>
       </section>
 
+      {/* Proprietor Section */}
+     
       <Footer />
     </div>
   );

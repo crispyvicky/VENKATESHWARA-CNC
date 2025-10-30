@@ -69,7 +69,7 @@ const Gallery = () => {
       <Navigation />
 
       {/* Page Header */}
-      <section className="relative h-[400px] flex items-center justify-center overflow-hidden mt-[90px]">
+      {/* <section className="relative h-[400px] flex items-center justify-center overflow-hidden mt-[90px]">
         <div className="absolute inset-0 bg-gradient-to-br from-walnut via-mahogany to-aged-oak" />
         <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnoiIHN0cm9rZT0iI0ZGRiIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9nPjwvc3ZnPg==')]" />
 
@@ -81,10 +81,10 @@ const Gallery = () => {
             Handcrafted Masterpieces That Tell Stories
           </p>
         </div>
-      </section>
+      </section> */}
 
       {/* Filter Tabs */}
-      <section className="sticky top-[90px] z-40 bg-background/95 backdrop-blur-md border-b border-aged-oak/20 py-6">
+      <section className="sticky top-[90px] z-40 bg-[#bbbbbb] backdrop-blur-md border-b border-aged-oak/20 py-6">
         <div className="max-w-[1200px] mx-auto px-8">
           <div className="flex flex-wrap justify-center gap-4">
             {categories.map((category) => (
@@ -105,7 +105,7 @@ const Gallery = () => {
       {/* Gallery Grid */}
       <section className="py-16 bg-background">
         <div className="max-w-[1200px] mx-auto px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pt-10">
             {filteredItems.map((item, index) => (
               <div
                 key={item.id}
@@ -168,9 +168,11 @@ const Gallery = () => {
           <p className="text-lg text-muted-foreground mb-8">
             Let us create a custom design tailored to your vision
           </p>
-          <Button variant="golden" size="lg">
-            Request Custom Quote
-          </Button>
+          <a href="/contact">
+            <Button variant="golden" size="lg" className="shadow-golden border-walnut border-2 hover:text-walnut">
+              Request Custom Quote
+            </Button>
+          </a>
         </div>
       </section>
 
