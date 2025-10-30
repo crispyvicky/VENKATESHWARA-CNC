@@ -3,6 +3,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
 import { Job } from "@/models/Job";
+import "@/models/Customer"; // ensure model is registered for populate
+import { Task } from "@/models/Task";
 
 export async function GET(_: NextRequest, { params }: { params: { id: string } }) {
   await connectToDatabase();
@@ -18,6 +20,12 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   await connectToDatabase();
   const doc = await Job.findByIdAndUpdate(params.id, body, { new: true });
   if (!doc) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+  // If the status is being updated to 'completed', set all related tasks status to 'finished'
+  if (body.status === "completed") {
+    await Task.updateMany({ job: params.id }, { status: "finished" });
+  }
+
   return NextResponse.json(doc);
 }
 

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import Navigation from "@/components/Navigation";
+// import Navigation from "@/components/Navigation";
 import { 
   LayoutDashboard, 
   Package, 
@@ -32,6 +32,7 @@ import AdminSidebar from "@/components/AdminSidebar";
 import { Calendar } from "@/components/ui/calendar";
 import { useRef } from "react";
 import { toast } from "sonner";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 function NewJobModal({ open, onClose, client, onSaved }: { open: boolean; onClose: () => void; client: any; onSaved: (job: any) => void }) {
   const defaultServices = ["CNC Cutting & Carving", "CNC Engraving", "Custom Wood Design", "Temple Door", "Portrait", "Decorative Jali & Grills", "Wall Art", "Furniture Crafting"];
   const [service, setService] = useState("");
@@ -252,7 +253,17 @@ function OrdersTab() {
   const [filterStatus, setFilterStatus] = useState("");
   const [payModal, setPayModal] = useState(false);
   const [payJob, setPayJob] = useState<any>(null);
-  const getJobs = () => fetch("/api/jobs").then(r=>r.json()).then(setJobs);
+  const getJobs = () => fetch("/api/jobs")
+    .then(async (r) => {
+      const text = await r.text();
+      if (!text) return [];
+      try {
+        return JSON.parse(text);
+      } catch {
+        return [];
+      }
+    })
+    .then(setJobs);
   useEffect(()=>{getJobs();},[]);
 
   const afterPayment = async (job: any) => {
@@ -321,26 +332,49 @@ function OrdersTab() {
   return (
     <div className="p-8">
       <div className="flex flex-wrap justify-between gap-2 mb-6">
-        <h2 className="text-2xl font-bold text-walnut">Orders & Quotes</h2>
+        <h2 className="text-3xl font-extrabold text-golden-teak mb-2 border-b-4 border-golden-teak pb-2 w-full pl-1">Orders & Quotes</h2>
         <div className="flex gap-2"><Input placeholder="Search client" value={search} onChange={e=>setSearch(e.target.value)} />
         <select value={filterStatus} onChange={e=>setFilterStatus(e.target.value)} className="rounded border h-10 px-3 ml-2"><option value="">Status</option><option value="pending">Pending</option><option value="in_progress">In Progress</option><option value="completed">Completed</option></select></div>
       </div>
-      <div className="overflow-x-auto rounded-lg border bg-card">
-        <table className="min-w-full text-left divide-y divide-walnut/30 even:bg-walnut/10 odd:bg-walnut/5">
+      <div className="overflow-x-auto rounded-2xl shadow-xl border-none bg-[#fff8e1] w-full mt-2 mb-6">
+        <table className="min-w-full text-left ">
           <thead>
-            <tr className="bg-walnut/80 text-golden-teak">
-              <th className="py-2 px-3">Service</th>
-              <th className="py-2 px-3">Client</th>
-              <th className="py-2 px-3">Dates</th>
-              <th className="py-2 px-3">Total</th>
-              <th className="py-2 px-3">Paid</th>
-              <th className="py-2 px-3">Balance</th>
-              <th className="py-2 px-3">Status</th>
-              <th className="py-2 px-3 text-center">Actions</th>
+            <tr className="bg-[#fcdf9b] border-b-2 border-golden-teak text-[#442609] text-lg font-bold">
+              <th className="py-4 px-4">Service</th>
+              <th className="py-4 px-4">Client</th>
+              <th className="py-4 px-4">Dates</th>
+              <th className="py-4 px-4">Total</th>
+              <th className="py-4 px-4">Paid</th>
+              <th className="py-4 px-4">Balance</th>
+              <th className="py-4 px-4">Status</th>
+              <th className="py-4 px-4 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {filtered.map(j=>(<tr key={j._id} className="border-t hover:bg-golden-teak/10"><td className="px-3 py-2">{j.description}</td><td className="px-3 py-2">{j.customer?.name}</td><td className="px-3 py-2">{j.createdAt ? new Date(j.createdAt).toLocaleDateString() : "-"}<br/>{j.deliveryDate ? "→ " + new Date(j.deliveryDate).toLocaleDateString() : ""}</td><td className="px-3 py-2">₹{j.total}</td><td className="px-3 py-2">₹{j.paid}</td><td className="px-3 py-2">₹{j.balance}</td><td className="px-3 py-2"><span className={`inline-block px-2 py-1 rounded text-xs font-bold ${j.status==='completed' ? 'bg-green-200 text-green-900' : j.status==='pending' ? 'bg-yellow-100 text-yellow-900' : 'bg-blue-100 text-blue-900'}`}>{j.status}</span></td><td className="px-3 py-2 flex flex-wrap gap-2 items-center justify-center"><Button size='sm' variant='outline' onClick={()=>{setPayJob(j);setPayModal(true);}}>Add Payment</Button>{j.status==='completed'?<Button size="sm" variant="golden" onClick={()=>generateOrOpenInvoice(j)}>Invoice</Button>:null}</td></tr>))}
+            {filtered.map((j, i) => (
+              <tr key={j._id} className={i%2===0 ? "bg-[#fff8e1] text-[#1a1204]" : "bg-[#f8e3b0] text-[#1a1204] border-t border-gold-leaf/30 hover:bg-gold-leaf/10 transition"}>
+                <td className="px-4 py-3 font-medium">{j.description}</td>
+                <td className="px-4 py-3">{j.customer?.name}</td>
+                <td className="px-4 py-3">{j.createdAt ? new Date(j.createdAt).toLocaleDateString() : "-"}<br/>{j.deliveryDate ? "→ " + new Date(j.deliveryDate).toLocaleDateString() : ""}</td>
+                <td className="px-4 py-3 font-bold">₹{j.total}</td>
+                <td className="px-4 py-3">₹{j.paid}</td>
+                <td className="px-4 py-3">₹{j.balance}</td>
+                <td className="px-4 py-3">
+                  <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${j.status==='completed' ? 'bg-green-200 text-green-900' : j.status==='pending' ? 'bg-yellow-100 text-yellow-900' : 'bg-blue-100 text-blue-900'}`}>{j.status}</span>
+                </td>
+                <td className="px-4 py-3 text-center">
+                  <Button 
+                    size='lg' 
+                    variant='golden'
+                    className="bg-gradient-to-r from-gold-leaf to-golden-teak text-[#312106] font-bold shadow-lg px-6 py-2 rounded-xl border-2 border-golden-teak hover:from-golden-teak hover:to-gold-leaf transition"
+                    onClick={()=>{setPayJob(j);setPayModal(true);}}
+                  >
+                    Add Payment
+                  </Button>
+                  {j.status==='completed'?<Button size="lg" variant="golden" className="ml-3 px-4 py-2 font-bold shadow border-golden-teak" onClick={()=>generateOrOpenInvoice(j)}>Invoice</Button>:null}
+                </td>
+              </tr>
+            ))}
             {filtered.length===0&&<tr><td colSpan={8} className="text-muted-foreground p-6 text-center">No jobs found.</td></tr>}
           </tbody>
         </table>
@@ -352,17 +386,22 @@ function OrdersTab() {
 function ProjectDetailsModal({ open, onClose, job, generateOrOpenInvoice }: { open: boolean; onClose: () => void; job: any; generateOrOpenInvoice: (job: any) => void; }) {
   if (!open || !job) return null;
   return (
-    <div className="fixed z-50 inset-0 flex items-center justify-center bg-black/50">
-      <div className="bg-walnut/90 text-gold-leaf shadow-2xl rounded-2xl border border-walnut/40">
-        <button onClick={onClose} className="absolute top-2 right-3 text-2xl">×</button>
-        <h3 className="text-xl font-bold mb-3 text-walnut">Job Details: {job.description}</h3>
+    <div className="fixed z-50 inset-0 flex items-center justify-center bg-black/40">
+      <div className="relative bg-[#fff8e1] text-[#312106] shadow-2xl rounded-2xl border-2 border-golden-teak px-10 py-8 min-w-[360px] max-w-full w-[90vw] md:w-[520px] animate-fadeIn">
+        <button aria-label="Close" onClick={onClose} className="absolute top-5 right-5 text-3xl text-golden-teak hover:text-red-500 transition-colors bg-transparent p-1.5 rounded-full focus:outline-none focus:ring-2 focus:ring-gold-leaf/40">×</button>
+        <h3 className="text-2xl font-bold mb-4 text-golden-teak border-b-2 border-golden-teak pb-2">Job Details</h3>
         <div className="mb-1"><span className='font-bold text-walnut'>Client:</span> {job.customer?.name} ({job.customer?.phone || "No phone"})</div>
-        <div className="mb-1 text-sm">Created: {job.createdAt ? new Date(job.createdAt).toLocaleDateString() : "-"} | Delivery: {job.deliveryDate ? new Date(job.deliveryDate).toLocaleDateString() : "-"}</div>
-        <div className='mb-1'>Service: <b>{job.description}</b></div>
-        <div className='mb-1'>Rate: ₹{job.rate}, Qty: {job.quantity}, Discount: ₹{job.discount}, Advance: ₹{job.advance}</div>
-        <div className='mb-2'>Paid: ₹{job.paid}, Balance: ₹{job.balance}, <span className='font-bold'>Status:</span> {job.status}</div>
-        <div>
-          {job.status==='completed' && <Button variant='golden' className='mt-4' onClick={()=>generateOrOpenInvoice(job)}>Generate/View Invoice</Button>}
+        <div className="mb-1 text-base">Created: {job.createdAt ? new Date(job.createdAt).toLocaleDateString() : "-"} &nbsp;|&nbsp; Delivery: {job.deliveryDate ? new Date(job.deliveryDate).toLocaleDateString() : "-"}</div>
+        <div className="mb-1"><span className='font-bold'>Service:</span> {job.description}</div>
+        <div className='mb-1'>Rate: <b>₹{job.rate}</b>, Qty: <b>{job.quantity}</b>, Discount: <b>₹{job.discount}</b>, Advance: <b>₹{job.advance}</b></div>
+        <div className='mb-2'>Paid: <b>₹{job.paid}</b>, Balance: <b>₹{job.balance}</b>, &nbsp; <span className='font-bold'>Status:</span> <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ml-1 ${job.status==='completed' ? 'bg-green-200 text-green-900' : job.status==='pending' ? 'bg-yellow-100 text-yellow-900' : 'bg-blue-100 text-blue-900'}`}>{job.status}</span></div>
+        <div className='flex gap-3 pt-4'>
+          {job.status==='completed' && (
+            <Button variant='golden' className='flex-1' onClick={()=>generateOrOpenInvoice(job)}>
+              Generate/View Invoice
+            </Button>
+          )}
+          <Button variant='outline' onClick={onClose} className='flex-1'>Close</Button>
         </div>
       </div>
     </div>
@@ -416,27 +455,42 @@ function ProjectsTab() {
   };
   return (
     <div className="p-8">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-walnut">All Projects / Jobs</h2>
-        <Button variant="outline" onClick={exportCsv}>Export CSV</Button>
+      <div className="flex flex-wrap justify-between gap-2 mb-6">
+        <h2 className="text-3xl font-extrabold text-golden-teak mb-2 border-b-4 border-golden-teak pb-2 w-full pl-1">All Projects / Jobs</h2>
+        <div className="flex gap-2">
+          <Input placeholder="Search client/job" value={search} onChange={e=>setSearch(e.target.value)} />
+          <Button variant="outline" onClick={exportCsv}>Export CSV</Button>
+        </div>
       </div>
-      <div className="max-w-xs mb-4"><Input placeholder="Search client/job" value={search} onChange={e=>setSearch(e.target.value)} /></div>
-      <div className="overflow-x-auto rounded-lg border bg-card">
-        <table className="min-w-full text-left divide-y divide-walnut/30 even:bg-walnut/10 odd:bg-walnut/5">
+      <div className="overflow-x-auto rounded-2xl border-none bg-[#fff8e1] w-full mt-2 mb-6">
+        <table className="min-w-full text-left ">
           <thead>
-            <tr className="bg-walnut/80 text-golden-teak">
-              <th className="py-2 px-3">Job</th>
-              <th className="py-2 px-3">Client</th>
-              <th className="py-2 px-3">Created</th>
-              <th className="py-2 px-3">Total</th>
-              <th className="py-2 px-3">Paid</th>
-              <th className="py-2 px-3">Balance</th>
-              <th className="py-2 px-3">Status</th>
-              <th className="py-2 px-3 text-center">Action</th>
+            <tr className="bg-[#fcdf9b] border-b-2 border-golden-teak text-[#442609] text-lg font-bold">
+              <th className="py-4 px-4">Job</th>
+              <th className="py-4 px-4">Client</th>
+              <th className="py-4 px-4">Created</th>
+              <th className="py-4 px-4">Total</th>
+              <th className="py-4 px-4">Paid</th>
+              <th className="py-4 px-4">Balance</th>
+              <th className="py-4 px-4">Status</th>
+              <th className="py-4 px-4 text-center">Action</th>
             </tr>
           </thead>
           <tbody>
-            {filtered.map(j=>(<tr key={j._id} className="border-t hover:bg-golden-teak/10"><td className="px-3 py-2">{j.description}</td><td className="px-3 py-2">{j.customer?.name}</td><td className="px-3 py-2">{j.createdAt ? new Date(j.createdAt).toLocaleDateString() : "-"}</td><td className="px-3 py-2">₹{j.total}</td><td className="px-3 py-2">₹{j.paid}</td><td className="px-3 py-2">₹{j.balance}</td><td className="px-3 py-2"><span className={`inline-block px-2 py-1 rounded text-xs font-bold ${j.status==='completed' ? 'bg-green-200 text-green-900' : j.status==='pending' ? 'bg-yellow-100 text-yellow-900' : 'bg-blue-100 text-blue-900'}`}>{j.status}</span></td><td className="px-3 py-2 text-center"><Button size='sm' variant='outline' onClick={()=>setModalJob(j)}>View</Button></td></tr>))}{filtered.length===0&&<tr><td colSpan={8} className="text-center text-muted-foreground py-8">No jobs found.</td></tr>}</tbody>
+            {filtered.map(j=>(
+              <tr key={j._id} className="even:bg-[#fff8e1] odd:bg-[#f8e3b0] text-[#1a1204] border-t border-gold-leaf/30 hover:bg-gold-leaf/10 transition">
+                <td className="px-4 py-3 font-medium">{j.description}</td>
+                <td className="px-4 py-3">{j.customer?.name}</td>
+                <td className="px-4 py-3">{j.createdAt ? new Date(j.createdAt).toLocaleDateString() : "-"}</td>
+                <td className="px-4 py-3">₹{j.total}</td>
+                <td className="px-4 py-3">₹{j.paid}</td>
+                <td className="px-4 py-3">₹{j.balance}</td>
+                <td className="px-4 py-3"><span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${j.status==='completed' ? 'bg-green-200 text-green-900' : j.status==='pending' ? 'bg-yellow-100 text-yellow-900' : 'bg-blue-100 text-blue-900'}`}>{j.status}</span></td>
+                <td className="px-4 py-3 text-center"><Button size='sm' variant='outline' onClick={()=>setModalJob(j)}>View</Button></td>
+              </tr>
+            ))}
+            {filtered.length===0&&<tr><td colSpan={8} className="text-muted-foreground p-6 text-center">No jobs found.</td></tr>}
+          </tbody>
         </table>
       </div>
       <ProjectDetailsModal open={!!modalJob} onClose={()=>setModalJob(null)} job={modalJob} generateOrOpenInvoice={generateOrOpenInvoice} />
@@ -454,9 +508,33 @@ function ServicesTab() {
   const saveEdit = async idx=>{ await fetch('/api/services',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({old:services[idx],name:editVal})}); setServices(s=>(s.map((e,i)=>i===idx?editVal:e))); setEditIdx(-1); setEditVal(""); };
   const deleteService = async i=>{ await fetch('/api/services',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:services[i]})}); setServices(s=>(s.filter((_,x)=>x!==i))); };
   return (
-    <div className='p-8'>
-      <div className='flex items-center justify-between mb-6'><h2 className='text-2xl font-bold text-walnut'>Service Master List</h2><div className='flex gap-2'><Input placeholder='Add new service' value={adding} onChange={e=>setAdding(e.target.value)} /><Button variant='golden' onClick={addService}>Add</Button></div></div>
-      <div className='overflow-x-auto rounded-lg border bg-card max-w-lg'><table className='min-w-full text-left'><thead><tr className='bg-walnut/80 text-golden-teak'><th className='py-2 px-3'>Service</th><th></th></tr></thead><tbody>{services.map((s,i)=>(<tr key={s+i} className='border-t hover:bg-golden-teak/10'><td className='px-3 py-2'>{editIdx===i?<Input value={editVal} onChange={e=>setEditVal(e.target.value)} />:s}</td><td className='px-3 py-2 text-right'>{editIdx===i?<Button size='sm' variant='golden' onClick={()=>saveEdit(i)}>Save</Button>:<Button size='sm' variant='outline' onClick={()=>{setEditIdx(i);setEditVal(s);}}>Edit</Button>}<Button size='sm' variant='outline' className='ml-2' onClick={()=>deleteService(i)}>Delete</Button></td></tr>))}{services.length===0&&<tr><td colSpan={2} className='text-center text-muted-foreground py-8'>No services</td></tr>}</tbody></table></div>
+    <div className="p-8">
+      <div className="flex flex-wrap justify-between gap-2 mb-6">
+        <h2 className="text-3xl font-extrabold text-golden-teak mb-2 border-b-4 border-golden-teak pb-2 w-full pl-1">Service Master List</h2>
+        <div className="flex gap-2">
+          <Input placeholder='Add new service' value={adding} onChange={e=>setAdding(e.target.value)} />
+          <Button variant='golden' onClick={addService}>Add</Button>
+        </div>
+      </div>
+      <div className="overflow-x-auto rounded-2xl border-none bg-[#fff8e1] w-full mt-2 mb-6 max-w-lg">
+        <table className="min-w-full text-left ">
+          <thead>
+            <tr className="bg-[#fcdf9b] border-b-2 border-golden-teak text-[#442609] text-lg font-bold">
+              <th className="py-4 px-4">Service</th>
+              <th className="py-4 px-4"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {services.map((s,i)=>(
+              <tr key={s+i} className="even:bg-[#fff8e1] odd:bg-[#f8e3b0] text-[#1a1204] border-t border-gold-leaf/30 hover:bg-gold-leaf/10 transition">
+                <td className="px-4 py-3">{editIdx===i?<Input value={editVal} onChange={e=>setEditVal(e.target.value)} />:s}</td>
+                <td className="px-4 py-3 text-right">{editIdx===i?<Button size='sm' variant='golden' onClick={()=>saveEdit(i)}>Save</Button>:<Button size='sm' variant='outline' onClick={()=>{setEditIdx(i);setEditVal(s);}}>Edit</Button>}<Button size='sm' variant='outline' className='ml-2' onClick={()=>deleteService(i)}>Delete</Button></td>
+              </tr>
+            ))}
+            {services.length===0&&<tr><td colSpan={2} className="text-muted-foreground p-6 text-center">No services</td></tr>}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
@@ -466,21 +544,38 @@ function PaymentsTab() {
   useEffect(()=>{fetch('/api/payments').then(r=>r.json()).then(p=>setPayments(p));},[]);
   const filtered = payments.filter(p=>(!search || p.customer?.name.toLowerCase().includes(search.toLowerCase())));
   return (
-    <div className="p-8"><h2 className="text-2xl font-bold text-walnut mb-6">All Payments</h2><div className='max-w-xs mb-4'><Input placeholder="Search client/job" value={search} onChange={e=>setSearch(e.target.value)} /></div><div className="overflow-x-auto rounded-lg border bg-card">
-        <table className="min-w-full text-left divide-y divide-walnut/30 even:bg-walnut/10 odd:bg-walnut/5">
+    <div className="p-8">
+      <div className="flex flex-wrap justify-between gap-2 mb-6">
+        <h2 className="text-3xl font-extrabold text-golden-teak mb-2 border-b-4 border-golden-teak pb-2 w-full pl-1">All Payments</h2>
+        <div className="flex gap-2">
+          <Input placeholder="Search client/job" value={search} onChange={e=>setSearch(e.target.value)} />
+        </div>
+      </div>
+      <div className="overflow-x-auto rounded-2xl border-none bg-[#fff8e1] w-full mt-2 mb-6">
+        <table className="min-w-full text-left ">
           <thead>
-            <tr className="bg-walnut/80 text-golden-teak">
-              <th className="py-2 px-3">Client</th>
-              <th className="py-2 px-3">Job/service</th>
-              <th className="py-2 px-3">Amount</th>
-              <th className="py-2 px-3">Date</th>
-              <th></th>
+            <tr className="bg-[#fcdf9b] border-b-2 border-golden-teak text-[#442609] text-lg font-bold">
+              <th className="py-4 px-4">Client</th>
+              <th className="py-4 px-4">Job/service</th>
+              <th className="py-4 px-4">Amount</th>
+              <th className="py-4 px-4">Date</th>
             </tr>
           </thead>
           <tbody>
-            {filtered.map(p=>(<tr key={p._id} className='border-t hover:bg-golden-teak/10'><td className="px-3 py-2">{p.customer?.name}</td><td className="px-3 py-2">{p.job&&p.job.description}</td><td className="px-3 py-2">₹{p.amount}</td><td className="px-3 py-2">{p.createdAt ? new Date(p.createdAt).toLocaleDateString() : "-"}</td><td className="px-3 py-2 text-right"></td></tr>))}{filtered.length===0&&<tr><td colSpan={5} className='text-center text-muted-foreground py-8'>No payments</td></tr>}</tbody>
+            {filtered.map(p=>(
+              <tr key={p._id} className="even:bg-[#fff8e1] odd:bg-[#f8e3b0] text-[#1a1204] border-t border-gold-leaf/30 hover:bg-gold-leaf/10 transition">
+                <td className="px-4 py-3 font-medium">{p.customer?.name}</td>
+                <td className="px-4 py-3">{p.job&&p.job.description}</td>
+                <td className="px-4 py-3">₹{p.amount}</td>
+                <td className="px-4 py-3">{p.createdAt ? new Date(p.createdAt).toLocaleDateString() : "-"}</td>
+              </tr>
+            ))}
+            {filtered.length===0&&<tr><td colSpan={4} className="text-muted-foreground p-6 text-center">No payments</td></tr>}
+          </tbody>
         </table>
-      </div></div>);
+      </div>
+    </div>
+  );
 }
 function SettingsTab() {
   const [email, setEmail] = useState("");
@@ -489,10 +584,10 @@ function SettingsTab() {
     fetch('/api/settings').then(r=>r.json()).then(data=>setEmail(data.email))
   }, []);
   const saveSettings = (e: React.FormEvent) => { e.preventDefault(); toast("Updating ENV settings via web is restricted. Please update .env.local manually for changes to take effect."); };
-              return (
-    <div className="p-8 max-w-lg mx-auto">
-      <h2 className="text-2xl font-bold text-walnut mb-4">Admin Settings</h2>
-      <form className='space-y-6' onSubmit={saveSettings}>
+  return (
+    <div className="p-8">
+      <h2 className="text-3xl font-extrabold text-golden-teak mb-2 border-b-4 border-golden-teak pb-2 w-full pl-1">Admin Settings</h2>
+      <form className='space-y-6 mt-6 max-w-xl' onSubmit={saveSettings}>
         <div><label className='block mb-1 text-walnut'>Admin Email</label><Input value={email} onChange={e => setEmail(e.target.value)} disabled /></div>
         <div><label className='block mb-1 text-walnut'>Password</label><Input value={password} onChange={e => setPassword(e.target.value)} type='password' placeholder='(set in .env)' disabled /></div>
         <div><label className='block mb-1 text-walnut'>Brand Logo (future)</label><input type='file' disabled className='border p-2 rounded w-full' /></div>
@@ -588,100 +683,29 @@ function GalleryTab() {
 
   return (
     <div className="p-8">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-walnut">Gallery Manager</h2>
-        <Button variant="golden" onClick={() => fileInputRef.current?.click() }>Upload New Image</Button>
-        <input ref={fileInputRef} type="file" accept="image/*" onChange={e => { const f = e.target.files?.[0]; setFile(f||null); }} style={{ display: 'none' }} />
-      </div>
-      <div className="flex flex-wrap gap-4 mb-4">
-        <Input placeholder="Search images" value={title} onChange={e => setTitle(e.target.value)} />
-        <select value={category} onChange={e => setCategory(e.target.value)} className="rounded border h-10 px-3">
-          <option value="">All Categories</option>
-          <option value="woodwork">Woodwork</option>
-          <option value="carving">Carving</option>
-          <option value="engraving">Engraving</option>
-          <option value="custom">Custom</option>
-          <option value="temple">Temple</option>
-          <option value="decorative">Decorative</option>
-          <option value="wall_art">Wall Art</option>
-          <option value="furniture">Furniture</option>
-        </select>
-                </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {images
-          .filter(img => img.title.toLowerCase().includes(title.toLowerCase()) && (category === "" || img.category === category))
-          .map((image) => (
-            <div key={image._id} className="bg-card shadow border p-4 rounded-lg flex flex-col items-center">
-              <Image src={image.url} alt={image.title} width={200} height={150} className="w-full h-auto object-cover rounded-md mb-2" />
-              <div className="flex justify-between w-full mb-2">
-                <span className="text-sm text-walnut">{image.title}</span>
-                <span className="text-sm text-walnut">{image.category}</span>
-                </div>
-              <div className="flex gap-2 w-full">
-                <Button size="sm" variant="outline" onClick={() => handleEdit(image)}>Edit</Button>
-                <Button size="sm" variant="outline" onClick={() => handleDelete(image._id)}>Delete</Button>
-              </div>
-            </div>
-          ))}
-      </div>
-      {file && (
-        <div className="mt-6 p-4 bg-walnut/90 text-gold-leaf shadow-2xl rounded-2xl border border-walnut/40">
-          <h3 className="text-xl font-bold mb-3 text-walnut">Upload New Image</h3>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm text-walnut mb-1">Title</label>
-              <Input value={title} onChange={e => setTitle(e.target.value)} />
-          </div>
-            <div>
-              <label className="block text-sm text-walnut mb-1">Category</label>
-              <select value={category} onChange={e => setCategory(e.target.value)} className="w-full h-12 px-4 rounded border">
-                <option value="woodwork">Woodwork</option>
-                <option value="carving">Carving</option>
-                <option value="engraving">Engraving</option>
-                <option value="custom">Custom</option>
-                <option value="temple">Temple</option>
-                <option value="decorative">Decorative</option>
-                <option value="wall_art">Wall Art</option>
-                <option value="furniture">Furniture</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm text-walnut mb-1">Selected Image</label>
-              <div className="text-sm text-walnut mb-2">{file ? file.name : "None selected"}</div>
-              <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click() }>Choose File</Button>
-                    </div>
-            <Button variant="golden" onClick={handleUpload} disabled={uploading}>
-              {uploading ? "Uploading..." : "Upload Image"}
-            </Button>
-                  </div>
-                </div>
-      )}
-      {editId && (
-        <div className="mt-6 p-4 bg-walnut/90 text-gold-leaf shadow-2xl rounded-2xl border border-walnut/40">
-          <h3 className="text-xl font-bold mb-3 text-walnut">Edit Image</h3>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm text-walnut mb-1">Title</label>
-              <Input value={editTitle} onChange={e => setEditTitle(e.target.value)} />
-            </div>
-            <div>
-              <label className="block text-sm text-walnut mb-1">Category</label>
-              <select value={editCategory} onChange={e => setEditCategory(e.target.value)} className="w-full h-12 px-4 rounded border">
-                <option value="woodwork">Woodwork</option>
-                <option value="carving">Carving</option>
-                <option value="engraving">Engraving</option>
-                <option value="custom">Custom</option>
-                <option value="temple">Temple</option>
-                <option value="decorative">Decorative</option>
-                <option value="wall_art">Wall Art</option>
-                <option value="furniture">Furniture</option>
-              </select>
-            </div>
-            <Button variant="golden" onClick={handleSaveEdit}>Save Changes</Button>
-            <Button variant="outline" onClick={() => setEditId(null)}>Cancel</Button>
-          </div>
+      <div className="flex flex-wrap justify-between gap-2 mb-6">
+        <h2 className="text-3xl font-extrabold text-golden-teak mb-2 border-b-4 border-golden-teak pb-2 w-full pl-1">Gallery Manager</h2>
+        <div className="flex gap-2">
+          <Input placeholder='Title' value={title} onChange={e=>setTitle(e.target.value)} />
+          <Input placeholder='Category' value={category} onChange={e=>setCategory(e.target.value)} />
+          <Button variant='outline' onClick={() => fileInputRef.current?.click()}>Choose File</Button>
+          <input onChange={e=>setFile(e.target.files?.[0]??null)} ref={fileInputRef} type="file" className="hidden" />
+          {file && <span className="text-sm text-muted-foreground ml-2">{file.name}</span>}
+          <Button className="text-black" variant='golden' onClick={handleUpload} disabled={uploading || !file}>Upload</Button>
         </div>
-      )}
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full bg-[#fff8e1] rounded-2xl p-6">
+        {images.length === 0 && <div className="col-span-full text-muted-foreground p-6 text-center">No images</div>}
+        {images.map(img => (
+          <div key={img._id} className="rounded-lg overflow-hidden border border-gold-leaf/30 bg-[#f8e3b0] flex flex-col">
+            <img src={img.url} alt={img.title} className="object-cover h-40 w-full" />
+            <div className="p-2">
+              <div className="font-bold text-walnut text-lg mb-1">{img.title}</div>
+              <div className="text-sandalwood text-sm">{img.category}</div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -693,8 +717,8 @@ function DashboardTab() {
   }, []);
   return (
     <div className='p-8'>
-      <h2 className='text-2xl font-bold text-walnut mb-6'>Admin Dashboard</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+      <h2 className="text-3xl font-extrabold text-golden-teak mb-2 border-b-4 border-golden-teak pb-2 w-full pl-1">Admin Dashboard</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8 mt-6">
         <div className='bg-walnut/60 rounded-xl p-6 shadow flex flex-col items-center'>
           <div className='text-golden-teak text-3xl font-bold'>{stats.totalJobs ?? '-'}</div>
           <div className='text-sandalwood mt-2'>Jobs/Orders</div>
@@ -723,63 +747,124 @@ function DashboardTab() {
   );
 }
 
-export default function Admin() {
+function Admin() {
+  const { data: session } = useSession();
   const [activeTab, setActiveTab] = useState("dashboard");
-  const { data: session, status } = useSession();
-  // Auth UX: If not signed in, show prompt or redirect (client-side only)
-  if (typeof window !== 'undefined' && status === "unauthenticated") {
-    signIn(undefined, { callbackUrl: "/admin" });
-    return <div className="min-h-screen flex items-center justify-center bg-background">Redirecting to sign in…</div>;
-  }
-  if (!session) return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div>
-        <div className="text-2xl mb-6">Sign in required</div>
-        <Button variant="golden" onClick={()=>signIn(undefined, { callbackUrl: "/admin" })}>Sign in</Button>
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState(null);
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const res = await signIn("credentials", {
+      email,
+      password,
+      redirect: false
+    });
+    if (!res || res.error) setLoginError("Invalid email or password");
+    else setLoginError(null);
+  };
+  if (!session) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-walnut">
+        <div className="bg-walnut/90 text-gold-leaf shadow-2xl rounded-2xl border border-walnut/40 p-8">
+          <h2 className="text-2xl font-bold mb-4 text-walnut">Admin Login</h2>
+          <p className="text-walnut mb-4">Sign in with your admin email and password.</p>
+          <form className="space-y-4" onSubmit={handleLogin}>
+            <input
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              placeholder="Email"
+              className="border rounded p-2 w-full text-walnut"
+              required
+            />
+            <input
+              type="password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              placeholder="Password"
+              className="border rounded p-2 w-full text-walnut"
+              required
+            />
+            {loginError && <div className="text-red-600 text-sm">{loginError}</div>}
+            <Button type="submit" className="w-full">Sign in</Button>
+          </form>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-[#181410] flex">
+    <div className="flex">
       <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-      {/* TopBar restored */}
-      <header className="fixed left-[230px] right-0 top-0 h-[70px] bg-[#231d16] border-b border-aged-oak/30 flex items-center px-8 z-20">
-        <div className="flex-1 flex gap-3 items-center">
-          <h1 className="text-xl font-display font-bold text-golden-teak">Venkateshwara CNC Admin</h1>
+      <main className="flex-1 p-8">
+        <h1 className="text-4xl font-bold text-walnut mb-6">Admin Panel</h1>
+        {/* <Navigation /> */}
+        <div className="mt-6">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="dashboard" aria-label="Dashboard">
+                <LayoutDashboard className="mr-2 h-4 w-4" />
+                Dashboard
+              </TabsTrigger>
+              <TabsTrigger value="clients" aria-label="Clients">
+                <Users className="mr-2 h-4 w-4" />
+                Clients
+              </TabsTrigger>
+              <TabsTrigger value="orders" aria-label="Orders & Quotes">
+                <Package className="mr-2 h-4 w-4" />
+                Orders & Quotes
+              </TabsTrigger>
+              <TabsTrigger value="projects" aria-label="Projects">
+                <FolderOpen className="mr-2 h-4 w-4" />
+                Projects
+              </TabsTrigger>
+              <TabsTrigger value="services" aria-label="Service Master List">
+                <Settings className="mr-2 h-4 w-4" />
+                Services
+              </TabsTrigger>
+              <TabsTrigger value="payments" aria-label="All Payments">
+                <ShoppingCart className="mr-2 h-4 w-4" />
+                Payments
+              </TabsTrigger>
+              <TabsTrigger value="settings" aria-label="Admin Settings">
+                <User className="mr-2 h-4 w-4" />
+                Settings
+              </TabsTrigger>
+              <TabsTrigger value="gallery" aria-label="Gallery Manager">
+                <ImageIcon className="mr-2 h-4 w-4" />
+                Gallery
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="dashboard">
+              <DashboardTab />
+            </TabsContent>
+            <TabsContent value="clients">
+              <ClientsTab />
+            </TabsContent>
+            <TabsContent value="orders">
+              <OrdersTab />
+            </TabsContent>
+            <TabsContent value="projects">
+              <ProjectsTab />
+            </TabsContent>
+            <TabsContent value="services">
+              <ServicesTab />
+            </TabsContent>
+            <TabsContent value="payments">
+              <PaymentsTab />
+            </TabsContent>
+            <TabsContent value="settings">
+              <SettingsTab />
+            </TabsContent>
+            <TabsContent value="gallery">
+              <GalleryTab />
+            </TabsContent>
+          </Tabs>
         </div>
-        <div className="flex items-center gap-4">
-          <button className="relative p-2 hover:bg-walnut/20 rounded-full transition-colors">
-            <Bell size={22} className="text-[#A0A0A0]" />
-            <span className="absolute top-1 right-1 w-2 h-2 bg-[#D32F2F] rounded-full"></span>
-              </button>
-          <div className="flex items-center gap-3 pl-4 border-l border-[rgba(212,165,116,0.2)]">
-            <div className="text-right">
-              <p className="text-sm font-medium text-[#F5F5F5]">{session?.user?.email || "Admin"}</p>
-              <p className="text-xs text-[#A0A0A0]">Signed in</p>
-            </div>
-            <div className="w-10 h-10 rounded-full bg-[#D4A574] flex items-center justify-center">
-              <User size={20} className="text-[#1A1A1A]" />
-            </div>
-          </div>
-          <Button variant="outline" onClick={() => signOut()} className="ml-2">Sign out</Button>
-        </div>
-      </header>
-      {/* Main Content with top offset */}
-      <main className="flex-1 ml-[230px] mt-[70px]">
-        {activeTab === "dashboard" && <DashboardTab />}
-        {activeTab === "clients" && <ClientsTab />}
-        {activeTab === "orders" && <OrdersTab />}
-        {activeTab === "projects" && <ProjectsTab />}
-        {activeTab === "payments" && <PaymentsTab />}
-        {activeTab === "services" && <ServicesTab />}
-        {activeTab === "settings" && <SettingsTab />}
-        {activeTab === "gallery" && <GalleryTab />}
-        </main>
+      </main>
     </div>
   );
 }
 
-export async function getServerSideProps() {
-  return { props: {} };
-}
+export default Admin;

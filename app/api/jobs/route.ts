@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
 import { Job } from "@/models/Job";
+import "@/models/Customer"; // ensure model is registered for populate
 
 export async function GET() {
   await connectToDatabase();

@@ -3,6 +3,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
 import { Invoice } from "@/models/Invoice";
+import "@/models/Customer"; // register for populate
+import "@/models/Job"; // register for populate
 
 export async function GET(_: NextRequest, { params }: { params: { id: string } }) {
   await connectToDatabase();
