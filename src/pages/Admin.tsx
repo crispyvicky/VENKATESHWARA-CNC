@@ -349,7 +349,7 @@ function OrdersTab() {
     </div>
   );
 }
-function ProjectDetailsModal({ open, onClose, job }: { open: boolean; onClose: () => void; job: any; }) {
+function ProjectDetailsModal({ open, onClose, job, generateOrOpenInvoice }: { open: boolean; onClose: () => void; job: any; generateOrOpenInvoice: (job: any) => void; }) {
   if (!open || !job) return null;
   return (
     <div className="fixed z-50 inset-0 flex items-center justify-center bg-black/50">
@@ -439,7 +439,7 @@ function ProjectsTab() {
             {filtered.map(j=>(<tr key={j._id} className="border-t hover:bg-golden-teak/10"><td className="px-3 py-2">{j.description}</td><td className="px-3 py-2">{j.customer?.name}</td><td className="px-3 py-2">{j.createdAt ? new Date(j.createdAt).toLocaleDateString() : "-"}</td><td className="px-3 py-2">₹{j.total}</td><td className="px-3 py-2">₹{j.paid}</td><td className="px-3 py-2">₹{j.balance}</td><td className="px-3 py-2"><span className={`inline-block px-2 py-1 rounded text-xs font-bold ${j.status==='completed' ? 'bg-green-200 text-green-900' : j.status==='pending' ? 'bg-yellow-100 text-yellow-900' : 'bg-blue-100 text-blue-900'}`}>{j.status}</span></td><td className="px-3 py-2 text-center"><Button size='sm' variant='outline' onClick={()=>setModalJob(j)}>View</Button></td></tr>))}{filtered.length===0&&<tr><td colSpan={8} className="text-center text-muted-foreground py-8">No jobs found.</td></tr>}</tbody>
         </table>
       </div>
-      <ProjectDetailsModal open={!!modalJob} onClose={()=>setModalJob(null)} job={modalJob} />
+      <ProjectDetailsModal open={!!modalJob} onClose={()=>setModalJob(null)} job={modalJob} generateOrOpenInvoice={generateOrOpenInvoice} />
     </div>
   );
 }

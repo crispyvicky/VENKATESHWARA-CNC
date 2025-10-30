@@ -2,14 +2,8 @@
   "/admin/page": "app/admin/page.js",
   "/services/page": "app/services/page.js",
   "/about/page": "app/about/page.js",
-  "/projects/page": "app/projects/page.js",
-  "/contact/page": "app/contact/page.js",
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/api/payments/route": "app/api/payments/route.js",
-  "/api/jobs/route": "app/api/jobs/route.js",
-  "/api/services/route": "app/api/services/route.js",
-  "/api/settings/route": "app/api/settings/route.js",
-  "/api/media/list/route": "app/api/media/list/route.js",
-  "/api/media/upload/route": "app/api/media/upload/route.js",
-  "/api/admin/stats/route": "app/api/admin/stats/route.js"
+  "/page": "app/page.js",
+  "/gallery/page": "app/gallery/page.js",
+  "/api/media/list/route": "app/api/media/list/route.js"
 }
